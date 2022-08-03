@@ -33,21 +33,4 @@ public class EnfantMapper {
         return enfant;
 
     }
-
-    // Il est a remarquer qu'on ne mappe pas l'id ou les tuteurs
-    public Enfant toEntity(EnfantUpdateForm form){
-
-        Enfant entity = new Enfant();
-
-        entity.setPrenom(form.getPrenom());
-        entity.setNom(form.getNom());
-        entity.setDateNaissance(form.getDateNaiss());
-        entity.setPropre(form.isPropre());
-        entity.setAllergies(form.getAllergies());
-        entity.setTuteurs(form.getTuteurs());
-
-        return entity;
-
-    }
-
 }
