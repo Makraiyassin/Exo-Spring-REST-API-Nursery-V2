@@ -2,7 +2,6 @@ package be.bstorm.akimts.rest.bxl.controller;
 
 import be.bstorm.akimts.rest.bxl.mapper.EnfantMapper;
 import be.bstorm.akimts.rest.bxl.model.dto.EnfantDTO;
-import be.bstorm.akimts.rest.bxl.model.dto.TuteurDTO;
 import be.bstorm.akimts.rest.bxl.model.entities.Enfant;
 import be.bstorm.akimts.rest.bxl.model.forms.EnfantInsertForm;
 import be.bstorm.akimts.rest.bxl.model.forms.EnfantUpdateForm;
@@ -12,59 +11,53 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.stream.Collectors;
-
 @RestController
 @RequestMapping("/enfant")
 public class EnfantController {
 
-    private final EnfantService service;
+    private final EnfantService enfantService;
     private final TuteurService tuteurService;
-    private final EnfantMapper mapper;
+    private final EnfantMapper enfantMapper;
 
-    public EnfantController(EnfantService service, TuteurService tuteurService, EnfantMapper mapper) {
-        this.service = service;
+    public EnfantController(EnfantService enfantService, TuteurService tuteurService, EnfantMapper enfantMapper) {
+        this.enfantService = enfantService;
         this.tuteurService = tuteurService;
-        this.mapper = mapper;
+        this.enfantMapper = enfantMapper;
     }
 
     @GetMapping("/{id:[0-9]+}")
     public EnfantDTO getOne(@PathVariable long id){
-        return EnfantDTO.toDTO( service.getOne(id) );
+        return EnfantDTO.toDTO( enfantService.getOne(id) );
     }
 
     @GetMapping({"", "/all"})
     public List<EnfantDTO> getAll(){
-        return service.getAll().stream()
+        return enfantService.getAll().stream()
                 .map( EnfantDTO::toDTO )
                 .toList();
     }
 
     @PostMapping
     public EnfantDTO insert(@RequestBody EnfantInsertForm form){
-        Enfant entity = mapper.toEntity(form);
-        entity = service.create( entity );
-        return EnfantDTO.toDTO( entity );
+        Enfant enfant = enfantMapper.toEntity(form);
+        if(form.getTuteurs()!= null)
+            enfant.setTuteurs(form.getTuteurs().stream().map(tuteurService::getOne).collect(Collectors.toSet()));
+
+        return EnfantDTO.toDTO( enfantService.create( enfant ) );
     }
 
     @DeleteMapping("/{id}")
     public EnfantDTO delete(@PathVariable long id){
-        return EnfantDTO.toDTO( service.delete(id) );
+        return EnfantDTO.toDTO( enfantService.delete(id) );
     }
 
     @PutMapping("/{id}")
     public EnfantDTO update(@PathVariable long id, @RequestBody EnfantUpdateForm form ){
-        Enfant enfant = new Enfant();
-        enfant.setPrenom(form.getPrenom());
-        enfant.setNom(form.getNom());
-        enfant.setDateNaissance(form.getDateNaiss());
-        enfant.setPropre(form.isPropre());
-        enfant.setAllergies(form.getAllergies());
+        Enfant enfant = enfantMapper.toEntity(form);
         if(form.getTuteurs()!= null)
             enfant.setTuteurs(form.getTuteurs().stream().map(tuteurService::getOne).collect(Collectors.toSet()));
 
-//        Enfant entity = mapper.toEntity(form);
-        return EnfantDTO.toDTO( service.update( id, enfant ) );
-
+        return EnfantDTO.toDTO( enfantService.update( id, enfant ) );
     }
 
 }
