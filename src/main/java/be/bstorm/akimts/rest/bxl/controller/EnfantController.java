@@ -24,12 +24,13 @@ public class EnfantController {
         this.tuteurService = tuteurService;
         this.enfantMapper = enfantMapper;
     }
-
+    @CrossOrigin(origins = "http://127.0.0.1:5500/")
     @GetMapping("/{id:[0-9]+}")
     public EnfantDTO getOne(@PathVariable long id){
         return EnfantDTO.toDTO( enfantService.getOne(id) );
     }
 
+    @CrossOrigin(origins = "http://127.0.0.1:5500/")
     @GetMapping({"", "/all"})
     public List<EnfantDTO> getAll(){
         return enfantService.getAll().stream()
