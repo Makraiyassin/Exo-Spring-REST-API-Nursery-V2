@@ -1,31 +1,21 @@
 package be.bstorm.akimts.rest.bxl.mapper;
 
 import be.bstorm.akimts.rest.bxl.model.dto.EnfantDTO;
+import be.bstorm.akimts.rest.bxl.model.dto.TuteurDTO;
 import be.bstorm.akimts.rest.bxl.model.entities.Enfant;
 import be.bstorm.akimts.rest.bxl.model.forms.EnfantInsertForm;
 import be.bstorm.akimts.rest.bxl.model.forms.EnfantUpdateForm;
+import be.bstorm.akimts.rest.bxl.service.impl.EnfantServiceImpl;
+import be.bstorm.akimts.rest.bxl.service.impl.TuteurServiceImpl;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.stream.Collectors;
+
 @Component
 public class EnfantMapper {
-
-    public EnfantDTO toDto(Enfant entity){
-
-        if( entity == null )
-            return null;
-
-        return EnfantDTO.builder()
-                .id( entity.getId() )
-                .prenom( entity.getPrenom() )
-                .nom( entity.getNom() )
-                .dateNaiss( entity.getDateNaissance() )
-                .allergies( entity.getAllergies() )
-                .proprete( entity.isPropre() )
-//                .tuteurs()
-                .build();
-
-    }
+    private EnfantServiceImpl enfantService;
+    private TuteurServiceImpl tuteurService;
 
     public Enfant toEntity(EnfantInsertForm form){
 
@@ -38,6 +28,7 @@ public class EnfantMapper {
         enfant.setNom( form.getNom() );
         enfant.setDateNaissance( form.getDateNaiss() );
         enfant.setPropre( form.isPropre() );
+        enfant.setAllergies(form.getAllergies());
 
         return enfant;
 
@@ -53,6 +44,7 @@ public class EnfantMapper {
         entity.setDateNaissance(form.getDateNaiss());
         entity.setPropre(form.isPropre());
         entity.setAllergies(form.getAllergies());
+        entity.setTuteurs(form.getTuteurs());
 
         return entity;
 

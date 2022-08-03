@@ -2,6 +2,7 @@ package be.bstorm.akimts.rest.bxl.model.forms;
 
 import be.bstorm.akimts.rest.bxl.model.dto.TuteurDTO;
 import be.bstorm.akimts.rest.bxl.model.entities.Enfant;
+import be.bstorm.akimts.rest.bxl.model.entities.Tuteur;
 import lombok.Data;
 
 import java.time.LocalDate;
@@ -16,7 +17,7 @@ public class EnfantUpdateForm {
     private LocalDate dateNaiss;
     private boolean propre;
     private List<String> allergies;
-    private Set<Long> tuteursId;
+    private Set<Tuteur> tuteurs;
 
     // 2e manière d'envisager le mappage
     // A remarque que l'id et les tuteurs ne sont pas setté

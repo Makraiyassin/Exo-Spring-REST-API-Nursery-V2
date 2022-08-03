@@ -1,8 +1,8 @@
 package be.bstorm.akimts.rest.bxl.controller;
 
+import be.bstorm.akimts.rest.bxl.mapper.TuteurMapper;
 import be.bstorm.akimts.rest.bxl.model.dto.TuteurDTO;
 import be.bstorm.akimts.rest.bxl.model.entities.Tuteur;
-import be.bstorm.akimts.rest.bxl.model.forms.EnfantUpdateForm;
 import be.bstorm.akimts.rest.bxl.model.forms.TuteurInsertForm;
 import be.bstorm.akimts.rest.bxl.model.forms.TuteurUpdateForm;
 import be.bstorm.akimts.rest.bxl.service.TuteurService;
@@ -15,10 +15,11 @@ import java.util.List;
 public class TuteurController {
 
     private final TuteurService service;
+    private final TuteurMapper mapper;
 
-
-    public TuteurController(TuteurService service) {
+    public TuteurController(TuteurService service, TuteurMapper mapper) {
         this.service = service;
+        this.mapper = mapper;
     }
 
     @GetMapping("/{id:[0-9]+}")
@@ -35,7 +36,7 @@ public class TuteurController {
 
     @PostMapping
     public TuteurDTO insert(@RequestBody TuteurInsertForm form){
-        Tuteur entity = form.toEntity();
+        Tuteur entity = mapper.toEntity(form);
         entity = service.create( entity );
         return TuteurDTO.toDto( entity );
     }
@@ -48,7 +49,7 @@ public class TuteurController {
     @PutMapping("/{id}")
     public TuteurDTO update(@PathVariable long id, @RequestBody TuteurUpdateForm form ){
 
-        Tuteur entity = form.toEntity();
+        Tuteur entity = mapper.toEntity(form);
         return TuteurDTO.toDto( service.update( id, entity ) );
 
     }

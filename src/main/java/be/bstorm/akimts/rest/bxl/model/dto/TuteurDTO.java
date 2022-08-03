@@ -16,6 +16,8 @@ public class TuteurDTO {
     private long id;
     private String nom;
     private String prenom;
+    private String adresse;
+    private String numTel;
 //    private Set<EnfantDTO> enfants;
     private Set<Long> enfantsIds;
 
@@ -33,6 +35,8 @@ public class TuteurDTO {
         tuteurDTO.setId(tuteur.getId());
         tuteurDTO.setNom(tuteur.getNom());
         tuteurDTO.setPrenom(tuteur.getPrenom());
+        tuteurDTO.setAdresse(tuteur.getAdresse());
+        tuteurDTO.setNumTel(tuteur.getNumTel());
         tuteurDTO.setEnfantsIds(tuteur.getEnfants().stream().map(Personne::getId).collect(Collectors.toSet()));
         return tuteurDTO;
     }

@@ -7,6 +7,7 @@ import javax.validation.constraints.Past;
 import javax.validation.constraints.PastOrPresent;
 import javax.validation.constraints.Size;
 import java.time.LocalDate;
+import java.util.List;
 
 @Data
 public class EnfantInsertForm {
@@ -18,5 +19,6 @@ public class EnfantInsertForm {
     @PastOrPresent
     private LocalDate dateNaiss;
     private boolean propre;
+    private List<String> allergies;
 
 }
