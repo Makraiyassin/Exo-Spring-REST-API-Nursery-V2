@@ -1,13 +1,9 @@
 package be.bstorm.akimts.rest.bxl.model.dto;
 
-import be.bstorm.akimts.rest.bxl.model.entities.Enfant;
 import be.bstorm.akimts.rest.bxl.model.entities.Personne;
 import be.bstorm.akimts.rest.bxl.model.entities.Tuteur;
-import be.bstorm.akimts.rest.bxl.model.forms.TuteurInsertForm;
 import lombok.Data;
 
-import java.time.LocalDate;
-import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 

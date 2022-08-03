@@ -2,9 +2,7 @@ package be.bstorm.akimts.rest.bxl.controller;
 
 import be.bstorm.akimts.rest.bxl.mapper.TuteurMapper;
 import be.bstorm.akimts.rest.bxl.model.dto.TuteurDTO;
-import be.bstorm.akimts.rest.bxl.model.entities.Tuteur;
-import be.bstorm.akimts.rest.bxl.model.forms.TuteurInsertForm;
-import be.bstorm.akimts.rest.bxl.model.forms.TuteurUpdateForm;
+import be.bstorm.akimts.rest.bxl.model.forms.TuteurForm;
 import be.bstorm.akimts.rest.bxl.service.TuteurService;
 import org.springframework.web.bind.annotation.*;
 
@@ -35,10 +33,8 @@ public class TuteurController {
     }
 
     @PostMapping
-    public TuteurDTO insert(@RequestBody TuteurInsertForm form){
-        Tuteur entity = mapper.toEntity(form);
-        entity = service.create( entity );
-        return TuteurDTO.toDto( entity );
+    public TuteurDTO insert(@RequestBody TuteurForm form){
+        return TuteurDTO.toDto( service.create( mapper.toEntity(form) ) );
     }
 
     @DeleteMapping("/{id}")
@@ -47,10 +43,8 @@ public class TuteurController {
     }
 
     @PutMapping("/{id}")
-    public TuteurDTO update(@PathVariable long id, @RequestBody TuteurUpdateForm form ){
-
-        Tuteur entity = mapper.toEntity(form);
-        return TuteurDTO.toDto( service.update( id, entity ) );
+    public TuteurDTO update(@PathVariable long id, @RequestBody TuteurForm form ){
+        return TuteurDTO.toDto( service.update( id, mapper.toEntity(form) ) );
 
     }
 

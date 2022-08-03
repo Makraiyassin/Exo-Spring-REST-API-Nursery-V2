@@ -41,9 +41,6 @@ public class EnfantController {
     @PostMapping
     public EnfantDTO insert(@RequestBody EnfantInsertForm form){
         Enfant enfant = enfantMapper.toEntity(form);
-        if(form.getTuteurs()!= null)
-            enfant.setTuteurs(form.getTuteurs().stream().map(tuteurService::getOne).collect(Collectors.toSet()));
-
         return EnfantDTO.toDTO( enfantService.create( enfant ) );
     }
 

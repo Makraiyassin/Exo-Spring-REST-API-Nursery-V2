@@ -1,13 +1,9 @@
 package be.bstorm.akimts.rest.bxl.mapper;
 
 import be.bstorm.akimts.rest.bxl.model.entities.Tuteur;
-import be.bstorm.akimts.rest.bxl.model.forms.TuteurInsertForm;
-import be.bstorm.akimts.rest.bxl.model.forms.TuteurUpdateForm;
+import be.bstorm.akimts.rest.bxl.model.forms.TuteurForm;
 import be.bstorm.akimts.rest.bxl.service.impl.EnfantServiceImpl;
-import be.bstorm.akimts.rest.bxl.service.impl.TuteurServiceImpl;
 import org.springframework.stereotype.Component;
-
-import java.util.stream.Collectors;
 
 @Component
 public class TuteurMapper {
@@ -18,7 +14,7 @@ public class TuteurMapper {
         this.enfantService = enfantService;
     }
 
-    public Tuteur toEntity(TuteurInsertForm form){
+    public Tuteur toEntity(TuteurForm form){
 
         if( form == null )
             return null;
@@ -34,17 +30,5 @@ public class TuteurMapper {
 
     }
 
-    public Tuteur toEntity(TuteurUpdateForm form){
-
-        Tuteur entity = new Tuteur();
-
-        entity.setPrenom(form.getPrenom());
-        entity.setNom(form.getNom());
-        entity.setAdresse(form.getAdresse());
-        entity.setNumTel(form.getNumTel());
-        entity.setEnfants(form.getEnfantsIds().stream().map(enfantService::getOne).collect(Collectors.toSet()));
-        return entity;
-
-    }
 
 }

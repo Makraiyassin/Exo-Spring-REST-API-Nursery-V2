@@ -19,7 +19,6 @@ public class EnfantMapper {
         enfant.setNom( form.getNom() );
         enfant.setDateNaissance( form.getDateNaiss() );
         enfant.setPropre( form.isPropre() );
-        enfant.setAllergies(form.getAllergies());
 
         return enfant;
 
