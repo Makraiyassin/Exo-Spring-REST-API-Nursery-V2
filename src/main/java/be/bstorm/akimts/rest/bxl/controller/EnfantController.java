@@ -29,6 +29,13 @@ public class EnfantController {
         this.tuteurService = tuteurService;
         this.enfantMapper = enfantMapper;
     }
+
+    @PostMapping
+    public EnfantDTO insert(@RequestBody EnfantInsertForm form){
+        Enfant enfant = enfantMapper.toEntity(form);
+        return EnfantDTO.toDTO( enfantService.create( enfant ) );
+    }
+
     @CrossOrigin(origins = "http://127.0.0.1:5500/")
     @GetMapping("/{id:[0-9]+}")
     public EnfantDTO getOne(@PathVariable long id){
@@ -43,16 +50,6 @@ public class EnfantController {
                 .toList();
     }
 
-    @PostMapping
-    public EnfantDTO insert(@RequestBody EnfantInsertForm form){
-        Enfant enfant = enfantMapper.toEntity(form);
-        return EnfantDTO.toDTO( enfantService.create( enfant ) );
-    }
-
-    @DeleteMapping("/{id}")
-    public EnfantDTO delete(@PathVariable long id){
-        return EnfantDTO.toDTO( enfantService.delete(id) );
-    }
 
     @PutMapping("/{id}")
     public EnfantDTO update(@PathVariable long id, @RequestBody EnfantUpdateForm form ){
@@ -64,6 +61,12 @@ public class EnfantController {
     public EnfantDTO updatePart(@PathVariable long id, @RequestBody EnfantUpdateForm form ){
         return EnfantDTO.toDTO( enfantService.updatePart( id, form ) );
     }
+
+    @DeleteMapping("/{id}")
+    public EnfantDTO delete(@PathVariable long id){
+        return EnfantDTO.toDTO( enfantService.delete(id) );
+    }
+
 
 //    @PatchMapping("/{id}")
 //    public EnfantDTO updateTuteur(@PathVariable long id, @RequestBody Set<Long> tuteurIds ){
