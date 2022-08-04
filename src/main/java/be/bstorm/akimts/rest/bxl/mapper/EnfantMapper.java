@@ -1,5 +1,6 @@
 package be.bstorm.akimts.rest.bxl.mapper;
 
+import be.bstorm.akimts.rest.bxl.model.dto.EnfantDTO;
 import be.bstorm.akimts.rest.bxl.model.entities.Enfant;
 import be.bstorm.akimts.rest.bxl.model.forms.EnfantInsertForm;
 import be.bstorm.akimts.rest.bxl.model.forms.EnfantUpdateForm;
@@ -36,6 +37,20 @@ public class EnfantMapper {
         entity.setDateNaissance(form.getDateNaiss());
         entity.setPropre(form.isPropre());
         entity.setAllergies(form.getAllergies());
+        return entity;
+
+    }
+    public Enfant toEntity(EnfantDTO dto){
+        if( dto == null )
+            return null;
+
+        Enfant entity = new Enfant();
+
+        entity.setPrenom(dto.getPrenom());
+        entity.setNom(dto.getNom());
+        entity.setDateNaissance(dto.getDateNaiss());
+        entity.setPropre(dto.isProprete());
+        entity.setAllergies(dto.getAllergies());
         return entity;
 
     }

@@ -1,6 +1,7 @@
 package be.bstorm.akimts.rest.bxl.service.impl;
 
 import be.bstorm.akimts.rest.bxl.model.entities.Enfant;
+import be.bstorm.akimts.rest.bxl.model.forms.EnfantUpdateForm;
 import be.bstorm.akimts.rest.bxl.service.EnfantService;
 import org.springframework.stereotype.Service;
 
@@ -36,5 +37,15 @@ public class EnfantServiceMock implements EnfantService {
             return null;
 
         return new Enfant();
+    }
+
+    @Override
+    public Enfant update(Long id, EnfantUpdateForm form) {
+        return null;
+    }
+
+    @Override
+    public Enfant updatePart(Long id, EnfantUpdateForm form) {
+        return null;
     }
 }

@@ -1,15 +1,20 @@
 package be.bstorm.akimts.rest.bxl.controller;
 
+import be.bstorm.akimts.rest.bxl.exceptions.ElementNotFoundException;
+import be.bstorm.akimts.rest.bxl.exceptions.UpdateTutorNotFoundException;
 import be.bstorm.akimts.rest.bxl.mapper.EnfantMapper;
 import be.bstorm.akimts.rest.bxl.model.dto.EnfantDTO;
 import be.bstorm.akimts.rest.bxl.model.entities.Enfant;
+import be.bstorm.akimts.rest.bxl.model.entities.Tuteur;
 import be.bstorm.akimts.rest.bxl.model.forms.EnfantInsertForm;
 import be.bstorm.akimts.rest.bxl.model.forms.EnfantUpdateForm;
 import be.bstorm.akimts.rest.bxl.service.EnfantService;
 import be.bstorm.akimts.rest.bxl.service.TuteurService;
 import org.springframework.web.bind.annotation.*;
 
+import javax.persistence.EntityNotFoundException;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 @RestController
 @RequestMapping("/enfant")
@@ -51,11 +56,27 @@ public class EnfantController {
 
     @PutMapping("/{id}")
     public EnfantDTO update(@PathVariable long id, @RequestBody EnfantUpdateForm form ){
-        Enfant enfant = enfantMapper.toEntity(form);
-        if(form.getTuteurs()!= null)
-            enfant.setTuteurs(form.getTuteurs().stream().map(tuteurService::getOne).collect(Collectors.toSet()));
 
-        return EnfantDTO.toDTO( enfantService.update( id, enfant ) );
+        return EnfantDTO.toDTO( enfantService.update( id, form ) );
     }
 
+    @PatchMapping("/{id}")
+    public EnfantDTO updatePart(@PathVariable long id, @RequestBody EnfantUpdateForm form ){
+        return EnfantDTO.toDTO( enfantService.updatePart( id, form ) );
+    }
+
+//    @PatchMapping("/{id}")
+//    public EnfantDTO updateTuteur(@PathVariable long id, @RequestBody Set<Long> tuteurIds ){
+//        Enfant enfant = enfantMapper.toEntity(getOne(id));
+//
+//        if(tuteurIds!= null && !tuteurIds.isEmpty()){
+//            tuteurIds.forEach(tId ->{
+//                if(!tuteurService.existById(tId)) throw new UpdateTutorNotFoundException(Tuteur.class, tId);
+//            });
+//            enfant.setTuteurs(tuteurIds.stream().map(tuteurService::getOne).collect(Collectors.toSet()));
+//        }
+//
+//
+//        return EnfantDTO.toDTO( enfantService.update( id, enfant ) );
+//    }
 }

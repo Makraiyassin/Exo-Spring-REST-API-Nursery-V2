@@ -1,6 +1,8 @@
 package be.bstorm.akimts.rest.bxl.service.impl;
 
 
+import be.bstorm.akimts.rest.bxl.exceptions.ElementNotFoundException;
+import be.bstorm.akimts.rest.bxl.exceptions.TutorReferencedException;
 import be.bstorm.akimts.rest.bxl.model.entities.Enfant;
 import be.bstorm.akimts.rest.bxl.model.entities.Tuteur;
 import be.bstorm.akimts.rest.bxl.repository.TuteurRepository;
@@ -45,7 +47,7 @@ public class TuteurServiceImpl implements TuteurService {
     @Override
     public Tuteur getOne(Long id) {
         return repository.findById(id)
-                .orElseThrow(EntityNotFoundException::new);
+                .orElseThrow(()->new ElementNotFoundException(Tuteur.class,id));
     }
 
     @Override
@@ -55,9 +57,23 @@ public class TuteurServiceImpl implements TuteurService {
 
     @Override
     public Tuteur delete(Long id) {
+        if( id == null )
+            throw new IllegalArgumentException("id cannot be null");
+
+        if( !repository.existsById(id) )
+            throw new ElementNotFoundException(Tuteur.class, id);
+
         Tuteur tuteur = getOne(id);
+
+        if(!tuteur.getEnfants().isEmpty())
+            throw new TutorReferencedException(tuteur);
+
         repository.delete(tuteur);
         tuteur.setId(0L);
         return tuteur;
+    }
+
+    public Boolean existById(Long id){
+        return repository.existsById(id);
     }
 }
