@@ -20,6 +20,16 @@ public class TuteurServiceImpl implements TuteurService {
         this.repository = repository;
     }
 
+    @Override
+    public Tuteur getOne(Long id) {
+        return repository.findById(id)
+                .orElseThrow(()->new ElementNotFoundException(Tuteur.class,id));
+    }
+
+    @Override
+    public List<Tuteur> getAll() {
+        return repository.findAll();
+    }
 
     @Override
     public Tuteur create(Tuteur toInsert) {
@@ -45,17 +55,6 @@ public class TuteurServiceImpl implements TuteurService {
     }
 
     @Override
-    public Tuteur getOne(Long id) {
-        return repository.findById(id)
-                .orElseThrow(()->new ElementNotFoundException(Tuteur.class,id));
-    }
-
-    @Override
-    public List<Tuteur> getAll() {
-        return repository.findAll();
-    }
-
-    @Override
     public Tuteur delete(Long id) {
         if( id == null )
             throw new IllegalArgumentException("id cannot be null");
@@ -71,9 +70,5 @@ public class TuteurServiceImpl implements TuteurService {
         repository.delete(tuteur);
         tuteur.setId(0L);
         return tuteur;
-    }
-
-    public Boolean existById(Long id){
-        return repository.existsById(id);
     }
 }

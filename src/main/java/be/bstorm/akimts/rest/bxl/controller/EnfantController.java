@@ -12,21 +12,16 @@ import be.bstorm.akimts.rest.bxl.service.EnfantService;
 import be.bstorm.akimts.rest.bxl.service.TuteurService;
 import org.springframework.web.bind.annotation.*;
 
-import javax.persistence.EntityNotFoundException;
 import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
 @RestController
 @RequestMapping("/enfant")
 public class EnfantController {
 
     private final EnfantService enfantService;
-    private final TuteurService tuteurService;
     private final EnfantMapper enfantMapper;
 
-    public EnfantController(EnfantService enfantService, TuteurService tuteurService, EnfantMapper enfantMapper) {
+    public EnfantController(EnfantService enfantService, EnfantMapper enfantMapper) {
         this.enfantService = enfantService;
-        this.tuteurService = tuteurService;
         this.enfantMapper = enfantMapper;
     }
 

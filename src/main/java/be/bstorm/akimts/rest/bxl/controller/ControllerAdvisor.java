@@ -16,7 +16,6 @@ import java.time.LocalDateTime;
 @ControllerAdvice
 public class ControllerAdvisor {
 
-
     @ExceptionHandler(ElementNotFoundException.class)
     public ResponseEntity<ErrorDTO> handleException(ElementNotFoundException ex, HttpServletRequest req){
         return ResponseEntity.status(HttpStatus.NOT_FOUND)
@@ -30,19 +29,21 @@ public class ControllerAdvisor {
                                 .build()
                 );
     }
+
     @ExceptionHandler(TutorReferencedException.class)
     public ResponseEntity<ErrorDTO> handleException(TutorReferencedException ex, HttpServletRequest req){
-        return ResponseEntity.status(HttpStatus.I_AM_A_TEAPOT)
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                 .body(
                         ErrorDTO.builder()
                                 .message(ex.getMessage())
                                 .receivedAt( LocalDateTime.now() )
-                                .status( HttpStatus.I_AM_A_TEAPOT.value() )
+                                .status( HttpStatus.BAD_REQUEST.value() )
                                 .method( HttpMethod.resolve(req.getMethod()) )
                                 .path( req.getRequestURL().toString() )
                                 .build()
                 );
     }
+
     @ExceptionHandler(UpdateTutorNotFoundException.class)
     public ResponseEntity<ErrorDTO> handleException(UpdateTutorNotFoundException ex, HttpServletRequest req){
         return ResponseEntity.status(HttpStatus.I_AM_A_TEAPOT)

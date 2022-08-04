@@ -19,6 +19,10 @@ public class TuteurController {
         this.service = service;
         this.mapper = mapper;
     }
+    @PostMapping
+    public TuteurDTO insert(@RequestBody TuteurForm form){
+        return TuteurDTO.toDto( service.create( mapper.toEntity(form) ) );
+    }
 
     @GetMapping("/{id:[0-9]+}")
     public TuteurDTO getOne(@PathVariable long id){
@@ -32,20 +36,15 @@ public class TuteurController {
                 .toList();
     }
 
-    @PostMapping
-    public TuteurDTO insert(@RequestBody TuteurForm form){
-        return TuteurDTO.toDto( service.create( mapper.toEntity(form) ) );
+    @PutMapping("/{id}")
+    public TuteurDTO update(@PathVariable long id, @RequestBody TuteurForm form ){
+        return TuteurDTO.toDto( service.update( id, mapper.toEntity(form) ) );
+
     }
 
     @DeleteMapping("/{id}")
     public TuteurDTO delete(@PathVariable long id){
         return TuteurDTO.toDto( service.delete(id) );
-    }
-
-    @PutMapping("/{id}")
-    public TuteurDTO update(@PathVariable long id, @RequestBody TuteurForm form ){
-        return TuteurDTO.toDto( service.update( id, mapper.toEntity(form) ) );
-
     }
 
 }
