@@ -46,12 +46,12 @@ public class ControllerAdvisor {
 
     @ExceptionHandler(UpdateTutorNotFoundException.class)
     public ResponseEntity<ErrorDTO> handleException(UpdateTutorNotFoundException ex, HttpServletRequest req){
-        return ResponseEntity.status(HttpStatus.I_AM_A_TEAPOT)
+        return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY)
                 .body(
                         ErrorDTO.builder()
                                 .message(ex.getMessage())
                                 .receivedAt( LocalDateTime.now() )
-                                .status( HttpStatus.I_AM_A_TEAPOT.value() )
+                                .status( HttpStatus.UNPROCESSABLE_ENTITY.value() )
                                 .method( HttpMethod.resolve(req.getMethod()) )
                                 .path( req.getRequestURL().toString() )
                                 .build()

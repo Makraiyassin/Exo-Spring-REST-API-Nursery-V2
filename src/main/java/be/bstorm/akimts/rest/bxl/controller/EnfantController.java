@@ -46,18 +46,17 @@ public class EnfantController {
     }
 
 
-    @PutMapping("/{id}")
+    @PutMapping("/{id:[0-9]+}")
     public EnfantDTO update(@PathVariable long id, @RequestBody EnfantUpdateForm form ){
-
         return EnfantDTO.toDTO( enfantService.update( id, form ) );
     }
 
-    @PatchMapping("/{id}")
+    @PatchMapping("/{id:[0-9]+}")
     public EnfantDTO updatePart(@PathVariable long id, @RequestBody EnfantUpdateForm form ){
         return EnfantDTO.toDTO( enfantService.updatePart( id, form ) );
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/{id:[0-9]+}")
     public EnfantDTO delete(@PathVariable long id){
         return EnfantDTO.toDTO( enfantService.delete(id) );
     }

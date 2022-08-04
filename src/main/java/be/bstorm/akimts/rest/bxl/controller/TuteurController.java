@@ -36,13 +36,13 @@ public class TuteurController {
                 .toList();
     }
 
-    @PutMapping("/{id}")
+    @PutMapping("/{id:[0-9]+}")
     public TuteurDTO update(@PathVariable long id, @RequestBody TuteurForm form ){
         return TuteurDTO.toDto( service.update( id, mapper.toEntity(form) ) );
 
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/{id:[0-9]+}")
     public TuteurDTO delete(@PathVariable long id){
         return TuteurDTO.toDto( service.delete(id) );
     }
