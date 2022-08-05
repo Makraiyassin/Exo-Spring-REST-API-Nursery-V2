@@ -3,8 +3,10 @@ package be.bstorm.akimts.rest.bxl.service.impl;
 import be.bstorm.akimts.rest.bxl.exceptions.ElementNotFoundException;
 import be.bstorm.akimts.rest.bxl.exceptions.UpdateTutorNotFoundException;
 import be.bstorm.akimts.rest.bxl.mapper.EnfantMapper;
+import be.bstorm.akimts.rest.bxl.model.dto.EnfantDTO;
 import be.bstorm.akimts.rest.bxl.model.entities.Enfant;
 import be.bstorm.akimts.rest.bxl.model.entities.Tuteur;
+import be.bstorm.akimts.rest.bxl.model.forms.EnfantInsertForm;
 import be.bstorm.akimts.rest.bxl.model.forms.EnfantUpdateForm;
 import be.bstorm.akimts.rest.bxl.repository.EnfantRepository;
 import be.bstorm.akimts.rest.bxl.repository.TuteurRepository;
@@ -35,40 +37,28 @@ public class EnfantServiceImpl implements EnfantService {
     }
 
     @Override
-    public Enfant create(Enfant toInsert) {
+    public EnfantDTO create(EnfantInsertForm toInsert) {
         if( toInsert == null)
             throw new IllegalArgumentException("inserted child cannot be null");
 
-        toInsert.setId(null);
+        Enfant enfant = enfantMapper.toEntity(toInsert);
 
         return repository.save(toInsert);
     }
 
     @Override
-    public Enfant getOne(Long id) {
+    public EnfantDTO getOne(Long id) {
         return repository.findById(id)
                 .orElseThrow(()->new ElementNotFoundException(Enfant.class,id));
     }
 
     @Override
-    public List<Enfant> getAll() {
+    public List<EnfantDTO> getAll() {
         return repository.findAll();
     }
 
     @Override
-    public Enfant update(Long id, Enfant toUpdate) {
-        if(toUpdate == null || id == null)
-            throw new IllegalArgumentException("params cannot be null");
-
-        if( !repository.existsById(id) )
-            throw new EntityNotFoundException();
-
-        toUpdate.setId(id);
-        return repository.save(toUpdate);
-    }
-
-    @Override
-    public Enfant update(Long id, EnfantUpdateForm form) {
+    public EnfantDTO update(Long id, EnfantUpdateForm form) {
         if(form == null || id == null)
             throw new IllegalArgumentException("params cannot be null");
 
@@ -91,11 +81,11 @@ public class EnfantServiceImpl implements EnfantService {
         return repository.save(toUpdate);
     }
 
-    public Enfant updatePart(Long id, EnfantUpdateForm form) {
+    public EnfantDTO updatePart(Long id, EnfantUpdateForm form) {
         if(form == null || id == null)
             throw new IllegalArgumentException("params cannot be null");
 
-        Enfant toUpdate = getOne(id);
+        Enfant toUpdate = enfantMapper.toEntity(getOne(id));
 
         if(form.getNom() != null) toUpdate.setNom(form.getNom());
         if(form.getPrenom() != null) toUpdate.setPrenom(form.getPrenom());
@@ -122,10 +112,10 @@ public class EnfantServiceImpl implements EnfantService {
     }
 
     @Override
-    public Enfant delete(Long id) {
-        Enfant enfant = getOne(id);
+    public EnfantDTO delete(Long id) {
+        Enfant enfant = repository.findById(id)
+                        .orElseThrow(()-> new ElementNotFoundException(Enfant.class, id));
         repository.delete(enfant);
-        enfant.setId(0L);
-        return enfant;
+        return EnfantDTO.toDTO(enfant);
     }
 }

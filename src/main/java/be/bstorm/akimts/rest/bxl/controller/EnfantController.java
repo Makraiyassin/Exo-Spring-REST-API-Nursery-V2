@@ -27,8 +27,7 @@ public class EnfantController {
 
     @PostMapping
     public EnfantDTO insert(@RequestBody EnfantInsertForm form){
-        Enfant enfant = enfantMapper.toEntity(form);
-        return EnfantDTO.toDTO( enfantService.create( enfant ) );
+        return enfantService.create( form );
     }
 
     @CrossOrigin(origins = "http://127.0.0.1:5500/")
@@ -53,27 +52,11 @@ public class EnfantController {
 
     @PatchMapping("/{id:[0-9]+}")
     public EnfantDTO updatePart(@PathVariable long id, @RequestBody EnfantUpdateForm form ){
-        return EnfantDTO.toDTO( enfantService.updatePart( id, form ) );
+        return enfantService.updatePart( id, form );
     }
 
     @DeleteMapping("/{id:[0-9]+}")
     public EnfantDTO delete(@PathVariable long id){
-        return EnfantDTO.toDTO( enfantService.delete(id) );
+        return  enfantService.delete(id);
     }
-
-
-//    @PatchMapping("/{id}")
-//    public EnfantDTO updateTuteur(@PathVariable long id, @RequestBody Set<Long> tuteurIds ){
-//        Enfant enfant = enfantMapper.toEntity(getOne(id));
-//
-//        if(tuteurIds!= null && !tuteurIds.isEmpty()){
-//            tuteurIds.forEach(tId ->{
-//                if(!tuteurService.existById(tId)) throw new UpdateTutorNotFoundException(Tuteur.class, tId);
-//            });
-//            enfant.setTuteurs(tuteurIds.stream().map(tuteurService::getOne).collect(Collectors.toSet()));
-//        }
-//
-//
-//        return EnfantDTO.toDTO( enfantService.update( id, enfant ) );
-//    }
 }

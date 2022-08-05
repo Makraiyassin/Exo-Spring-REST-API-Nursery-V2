@@ -3,6 +3,7 @@ package be.bstorm.akimts.rest.bxl.service.impl;
 
 import be.bstorm.akimts.rest.bxl.exceptions.ElementNotFoundException;
 import be.bstorm.akimts.rest.bxl.exceptions.TutorReferencedException;
+import be.bstorm.akimts.rest.bxl.model.dto.TuteurDTO;
 import be.bstorm.akimts.rest.bxl.model.entities.Enfant;
 import be.bstorm.akimts.rest.bxl.model.entities.Tuteur;
 import be.bstorm.akimts.rest.bxl.repository.TuteurRepository;
@@ -55,7 +56,7 @@ public class TuteurServiceImpl implements TuteurService {
     }
 
     @Override
-    public Tuteur delete(Long id) {
+    public TuteurDTO delete(Long id) {
         if( id == null )
             throw new IllegalArgumentException("id cannot be null");
 
