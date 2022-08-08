@@ -29,9 +29,9 @@ public class ReservationController {
 
     @GetMapping(params = "date")
     public List<EnfantDTO> getChildrenPresentAt(@RequestParam String date){
-        DateTimeFormatter dateTimeFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
-        LocalDateTime localDate =  LocalDateTime.parse(date,dateTimeFormat);
-        return service.getChildrenPresentAt(localDate);
+        DateTimeFormatter dateTimeFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        LocalDate localDate =  LocalDate.parse(date,dateTimeFormat);
+        return service.getChildrenPresentAt(LocalDateTime.of(localDate.getYear(),localDate.getMonth(),localDate.getDayOfMonth(),0,0));
     }
 
     @PatchMapping("/cancel/{id}")
