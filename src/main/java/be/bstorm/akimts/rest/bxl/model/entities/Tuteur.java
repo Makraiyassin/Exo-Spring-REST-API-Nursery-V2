@@ -15,16 +15,11 @@ public class Tuteur extends Personne {
     @Column(nullable = false)
     private String numTel;
 
-    @Column(nullable = false)
-    private String adresse;
+    @ManyToOne
+    @JoinColumn(name = "adresse_id")
+    private Adresse adresse;
 
     @ManyToMany(mappedBy = "tuteurs")
     private Set<Enfant> enfants;
 
-    public Tuteur(String prenom, String nom, String numTel, String adresse, Set<Enfant> enfants) {
-        super(prenom, nom);
-        this.numTel = numTel;
-        this.adresse = adresse;
-        this.enfants = enfants;
-    }
 }

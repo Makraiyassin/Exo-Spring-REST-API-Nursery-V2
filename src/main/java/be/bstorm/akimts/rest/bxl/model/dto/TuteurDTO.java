@@ -1,39 +1,46 @@
 package be.bstorm.akimts.rest.bxl.model.dto;
 
-import be.bstorm.akimts.rest.bxl.model.entities.Personne;
-import be.bstorm.akimts.rest.bxl.model.entities.Tuteur;
+import be.bstorm.akimts.rest.bxl.model.entities.Enfant;
+import lombok.Builder;
 import lombok.Data;
 
+import java.time.LocalDate;
+import java.util.List;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 @Data
+@Builder
 public class TuteurDTO {
-    private long id;
-    private String nom;
+    private Long id;
     private String prenom;
-    private String adresse;
+    private String nom;
+    private AdresseDTO adresse;
     private String numTel;
-//    private Set<EnfantDTO> enfants;
-    private Set<Long> enfantsIds;
+    private Set<EnfantDTO> enfants;
 
-//    public static class EnfantDTO{
-//        private long id;
-//        private String nom;
-//        private String prenom;
-//        private LocalDate dateNaiss;
-//        private boolean proprete;
-//        private List<String> allergies;
-//    }
+    @Data
+    @Builder
+    public static class EnfantDTO {
+        private Long id;
+        private String nom;
+        private String prenom;
+        private LocalDate dateNaiss;
+        private String proprete;
+        private List<String> allergies;
 
-    public static TuteurDTO toDto(Tuteur tuteur){
-        TuteurDTO tuteurDTO = new TuteurDTO();
-        tuteurDTO.setId(tuteur.getId());
-        tuteurDTO.setNom(tuteur.getNom());
-        tuteurDTO.setPrenom(tuteur.getPrenom());
-        tuteurDTO.setAdresse(tuteur.getAdresse());
-        tuteurDTO.setNumTel(tuteur.getNumTel());
-        tuteurDTO.setEnfantsIds(tuteur.getEnfants().stream().map(Personne::getId).collect(Collectors.toSet()));
-        return tuteurDTO;
+
+        public static EnfantDTO fromEntity(Enfant entity){
+            if( entity == null )
+                return null;
+
+            return EnfantDTO.builder()
+                    .id( entity.getId() )
+                    .prenom( entity.getPrenom() )
+                    .nom( entity.getNom() )
+                    .dateNaiss( entity.getDateNaissance() )
+                    .allergies( entity.getAllergies() )
+                    .proprete( entity.isPropre() ? "propre" : "non-propre" )
+                    .build();
+        }
     }
 }

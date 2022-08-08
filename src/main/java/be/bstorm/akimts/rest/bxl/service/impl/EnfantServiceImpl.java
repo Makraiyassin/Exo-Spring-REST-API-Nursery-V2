@@ -1,21 +1,26 @@
 package be.bstorm.akimts.rest.bxl.service.impl;
 
 import be.bstorm.akimts.rest.bxl.exceptions.ElementNotFoundException;
-import be.bstorm.akimts.rest.bxl.exceptions.UpdateTutorNotFoundException;
+import be.bstorm.akimts.rest.bxl.exceptions.FormValidationException;
+import be.bstorm.akimts.rest.bxl.exceptions.InvalidReferenceException;
 import be.bstorm.akimts.rest.bxl.mapper.EnfantMapper;
+import be.bstorm.akimts.rest.bxl.model.dto.EnfantDTO;
 import be.bstorm.akimts.rest.bxl.model.entities.Enfant;
 import be.bstorm.akimts.rest.bxl.model.entities.Tuteur;
+import be.bstorm.akimts.rest.bxl.model.forms.EnfantInsertForm;
 import be.bstorm.akimts.rest.bxl.model.forms.EnfantUpdateForm;
 import be.bstorm.akimts.rest.bxl.repository.EnfantRepository;
 import be.bstorm.akimts.rest.bxl.repository.TuteurRepository;
 import be.bstorm.akimts.rest.bxl.service.EnfantService;
-import be.bstorm.akimts.rest.bxl.service.TuteurService;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
 
-import javax.persistence.EntityNotFoundException;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
 
 @Service
 //@Primary
@@ -23,109 +28,107 @@ public class EnfantServiceImpl implements EnfantService {
 
     private final EnfantRepository repository;
     private final TuteurRepository tuteurRepository;
-    private final EnfantMapper enfantMapper;
+    private final EnfantMapper mapper;
 
-    private final TuteurService tuteurService;
-
-    public EnfantServiceImpl(EnfantRepository repository, TuteurRepository tuteurRepository, EnfantMapper enfantMapper, TuteurService tuteurService) {
+    public EnfantServiceImpl(EnfantRepository repository, TuteurRepository tuteurRepository, EnfantMapper mapper) {
         this.repository = repository;
         this.tuteurRepository = tuteurRepository;
-        this.enfantMapper = enfantMapper;
-        this.tuteurService = tuteurService;
+        this.mapper = mapper;
     }
 
     @Override
-    public Enfant create(Enfant toInsert) {
+    public EnfantDTO create(EnfantInsertForm toInsert) {
         if( toInsert == null)
             throw new IllegalArgumentException("inserted child cannot be null");
 
-        toInsert.setId(null);
-
-        return repository.save(toInsert);
+        return mapper.toDto( repository.save( mapper.toEntity( toInsert ) ) );
     }
 
     @Override
-    public Enfant getOne(Long id) {
-        return repository.findById(id)
-                .orElseThrow(()->new ElementNotFoundException(Enfant.class,id));
-    }
-
-    @Override
-    public List<Enfant> getAll() {
-        return repository.findAll();
-    }
-
-    @Override
-    public Enfant update(Long id, Enfant toUpdate) {
+    public EnfantDTO update(Long id, EnfantUpdateForm toUpdate) {
         if(toUpdate == null || id == null)
             throw new IllegalArgumentException("params cannot be null");
 
         if( !repository.existsById(id) )
-            throw new EntityNotFoundException();
+            throw new ElementNotFoundException(Enfant.class, id);
 
-        toUpdate.setId(id);
-        return repository.save(toUpdate);
+        MultiValueMap<String, String> validationErrors = null;
+
+        if(toUpdate.getAllergies().stream()
+                .anyMatch( (allergie) -> allergie == null || allergie.isBlank() || allergie.isEmpty())) {
+            validationErrors = new LinkedMultiValueMap<>();
+            validationErrors.add("allergies", "certaines allergies sont invalides");
+        }
+
+        Enfant enfant = mapper.toEntity(toUpdate);
+        List<Tuteur> tuteurs = tuteurRepository.findAllById(toUpdate.getTuteursId());
+
+        if( tuteurs.size() < toUpdate.getTuteursId().size() ){
+            validationErrors = validationErrors == null ? new LinkedMultiValueMap<>() : validationErrors;
+            validationErrors.add("tuteurs", "certains id ne menent pas à un tuteur");
+        }
+
+        if( validationErrors != null )
+            throw new FormValidationException(validationErrors);
+
+        enfant.setTuteurs( new HashSet<>(tuteurs) );
+        enfant.setId(id);
+        return mapper.toDto( repository.save( enfant ) );
     }
 
     @Override
-    public Enfant update(Long id, EnfantUpdateForm form) {
-        if(form == null || id == null)
-            throw new IllegalArgumentException("params cannot be null");
-
-        if( !repository.existsById(id) )
-            throw new EntityNotFoundException();
-
-        Enfant toUpdate = enfantMapper.toEntity(form);
-
-        if(form.getTuteurs()!= null && !form.getTuteurs().isEmpty()){
-            Set<Long> formTuteursIds = form.getTuteurs();
-            try {
-                toUpdate.setTuteurs(formTuteursIds.stream().map(tuteurService::getOne).collect(Collectors.toSet()));
-            }
-            catch (ElementNotFoundException ex){
-                throw new UpdateTutorNotFoundException(Tuteur.class);
-            }
-
-        }
-        toUpdate.setId(id);
-        return repository.save(toUpdate);
-    }
-
-    public Enfant updatePart(Long id, EnfantUpdateForm form) {
-        if(form == null || id == null)
-            throw new IllegalArgumentException("params cannot be null");
-
-        Enfant toUpdate = getOne(id);
-
-        if(form.getNom() != null) toUpdate.setNom(form.getNom());
-        if(form.getPrenom() != null) toUpdate.setPrenom(form.getPrenom());
-        if(form.getDateNaiss() != null) toUpdate.setDateNaissance(form.getDateNaiss());
-        if(form.getAllergies() != null) toUpdate.setAllergies(form.getAllergies());
-        if(form.isPropre() != toUpdate.isPropre()) toUpdate.setPropre(form.isPropre());
-
-        if(form.getTuteurs()!= null && !form.getTuteurs().isEmpty()){
-            Set<Long> formTuteursIds = form.getTuteurs();
-            formTuteursIds.forEach(tId ->{
-                if(!tuteurRepository.existsById(tId)) throw new UpdateTutorNotFoundException(Tuteur.class, tId);
-            });
-            toUpdate.setTuteurs(
-                    formTuteursIds.stream().map(tuteurService::getOne).collect(Collectors.toSet())
-            );
-        }
-
-
-        if( !repository.existsById(id) )
-            throw new EntityNotFoundException();
-
-        toUpdate.setId(id);
-        return repository.save(toUpdate);
+    public EnfantDTO getOne(Long id) {
+        return repository.findById(id)
+                .map( mapper::toDto )
+                .orElseThrow(() -> new ElementNotFoundException(Enfant.class, id));
     }
 
     @Override
-    public Enfant delete(Long id) {
-        Enfant enfant = getOne(id);
+    public List<EnfantDTO> getAll() {
+        return repository.findAll().stream()
+                .map(mapper::toDto)
+                .toList();
+    }
+
+    @Override
+    @Transactional
+    public EnfantDTO delete(Long id) {
+        Enfant enfant = repository.findById(id)
+                        .orElseThrow(() -> new ElementNotFoundException(Enfant.class, id));
         repository.delete(enfant);
-        enfant.setId(0L);
-        return enfant;
+        enfant.setId(null);
+        return mapper.toDto(enfant);
     }
+
+    @Override
+    public EnfantDTO changeTuteurs(long id, Collection<Long> idTuteurs) {
+
+        Enfant enfant = repository.findById(id)
+                .orElseThrow(() -> new ElementNotFoundException(Enfant.class, id));
+
+        List<Tuteur> tuteurs = tuteurRepository.findAllById(idTuteurs);
+
+        if( tuteurs.size() < idTuteurs.size() ){
+            List<Long> found = tuteurs.stream()
+                    .map(Tuteur::getId)
+                    .toList();
+            List<Long> notFound = idTuteurs.stream()
+                    .filter( ident -> !found.contains(ident) )
+                    .toList();
+
+            throw new InvalidReferenceException(notFound);
+        }
+
+        enfant.setTuteurs( new HashSet<>(tuteurs) );
+        return mapper.toDto( repository.save(enfant) );
+    }
+
+    @Override
+    public List<EnfantDTO> getAllWithAllergie(String allergie) {
+        return repository.findByAllergiesContaining(allergie).stream()
+                .map(mapper::toDto)
+                .toList();
+    }
+
+
 }

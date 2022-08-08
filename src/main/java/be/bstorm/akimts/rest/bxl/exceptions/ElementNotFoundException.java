@@ -1,6 +1,8 @@
 package be.bstorm.akimts.rest.bxl.exceptions;
 
-
+/**
+ * thrown when an entity couldn't be found
+ */
 public class ElementNotFoundException extends RuntimeException {
 
     private final Class<?> clazz;

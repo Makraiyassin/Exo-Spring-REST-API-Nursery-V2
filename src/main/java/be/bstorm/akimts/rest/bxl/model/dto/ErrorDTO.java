@@ -3,6 +3,7 @@ package be.bstorm.akimts.rest.bxl.model.dto;
 import lombok.Builder;
 import lombok.Data;
 import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
 
 import java.time.LocalDateTime;
 import java.util.HashMap;
@@ -18,7 +19,8 @@ public class ErrorDTO {
     private String message;
     private int status;
     private Map<String, Object> infos;
-    public ErrorDTO(LocalDateTime receivedAt, HttpMethod method, String path, String message, int status, Map<String, Object> infos) {
+
+    private ErrorDTO(LocalDateTime receivedAt, HttpMethod method, String path, String message, int status, Map<String, Object> infos) {
         this.receivedAt = receivedAt;
         this.method = method;
         this.path = path;

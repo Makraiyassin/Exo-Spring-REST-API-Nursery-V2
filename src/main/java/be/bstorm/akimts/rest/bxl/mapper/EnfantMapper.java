@@ -1,14 +1,47 @@
 package be.bstorm.akimts.rest.bxl.mapper;
 
 import be.bstorm.akimts.rest.bxl.model.dto.EnfantDTO;
+import be.bstorm.akimts.rest.bxl.model.dto.TuteurDTO;
 import be.bstorm.akimts.rest.bxl.model.entities.Enfant;
 import be.bstorm.akimts.rest.bxl.model.forms.EnfantInsertForm;
 import be.bstorm.akimts.rest.bxl.model.forms.EnfantUpdateForm;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.HashSet;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Component
-
 public class EnfantMapper {
+
+    private final TuteurMapper tuteurMapper;
+
+    public EnfantMapper(TuteurMapper tuteurMapper) {
+        this.tuteurMapper = tuteurMapper;
+    }
+
+    public EnfantDTO toDto(Enfant entity){
+
+        if( entity == null )
+            return null;
+
+        Set<TuteurDTO> dtos = entity.getTuteurs().stream()
+                .map( tuteurMapper::toDto )
+                .collect(Collectors.toSet());
+
+        return EnfantDTO.builder()
+                .id( entity.getId() )
+                .prenom( entity.getPrenom() )
+                .nom( entity.getNom() )
+                .dateNaiss( entity.getDateNaissance() )
+                .allergies( entity.getAllergies() )
+                .proprete( entity.isPropre() ? "propre" : "non-propre" ) // propre / non-propre
+                .tuteurs( dtos )
+                .build();
+
+    }
+
     public Enfant toEntity(EnfantInsertForm form){
 
         if( form == null )
@@ -27,8 +60,9 @@ public class EnfantMapper {
 
     // Il est a remarquer qu'on ne mappe pas l'id ou les tuteurs
     public Enfant toEntity(EnfantUpdateForm form){
+
         if( form == null )
-            return null;
+            throw new IllegalArgumentException();
 
         Enfant entity = new Enfant();
 
@@ -36,22 +70,10 @@ public class EnfantMapper {
         entity.setNom(form.getNom());
         entity.setDateNaissance(form.getDateNaiss());
         entity.setPropre(form.isPropre());
-        entity.setAllergies(form.getAllergies());
+        entity.setAllergies( form.getAllergies().stream().map( String::trim ).toList() );
+
         return entity;
 
     }
-    public Enfant toEntity(EnfantDTO dto){
-        if( dto == null )
-            return null;
 
-        Enfant entity = new Enfant();
-
-        entity.setPrenom(dto.getPrenom());
-        entity.setNom(dto.getNom());
-        entity.setDateNaissance(dto.getDateNaiss());
-        entity.setPropre(dto.isProprete());
-        entity.setAllergies(dto.getAllergies());
-        return entity;
-
-    }
 }
