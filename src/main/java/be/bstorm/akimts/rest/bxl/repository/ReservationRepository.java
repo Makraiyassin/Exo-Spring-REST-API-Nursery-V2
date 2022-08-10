@@ -9,6 +9,8 @@ import java.util.List;
 public interface ReservationRepository extends JpaRepository<Reservation, Long> {
     List<Reservation> findByHeureArriveAfterAndHeureArriveBeforeAndAnnuleFalse(LocalDateTime afterDate,LocalDateTime beforeDate);
 
-    List<Reservation> findByEnfantAndHeureArriveAfter(Enfant enfant,LocalDateTime afterDate);
+    List<Reservation> findByEnfantAndHeureArriveAfterAndAnnuleFalse(Enfant enfant,LocalDateTime afterDate);
+
+    int countAllByHeureArriveAndHeureArriveAndAnnuleFalse(LocalDateTime afterDate,LocalDateTime beforeDate);
 
 }

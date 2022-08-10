@@ -5,6 +5,7 @@ import be.bstorm.akimts.rest.bxl.model.dto.ReservationDTO;
 import be.bstorm.akimts.rest.bxl.model.entities.Reservation;
 import be.bstorm.akimts.rest.bxl.model.forms.ReservationForm;
 import be.bstorm.akimts.rest.bxl.service.impl.ReservationService;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -28,10 +29,8 @@ public class ReservationController {
     }
 
     @GetMapping(params = "date")
-    public List<EnfantDTO> getChildrenPresentAt(@RequestParam String date){
-        DateTimeFormatter dateTimeFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-        LocalDate localDate =  LocalDate.parse(date,dateTimeFormat);
-        return service.getChildrenPresentAt(LocalDateTime.of(localDate.getYear(),localDate.getMonth(),localDate.getDayOfMonth(),0,0));
+    public List<EnfantDTO> getChildrenPresentAt(@RequestParam  @DateTimeFormat(iso = DateTimeFormat.ISO.DATE ) LocalDate date){
+        return service.getChildrenPresentAt(date);
     }
 
     @PatchMapping("/cancel/{id}")
