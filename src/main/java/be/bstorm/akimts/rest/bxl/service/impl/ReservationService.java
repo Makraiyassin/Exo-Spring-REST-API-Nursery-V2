@@ -55,8 +55,6 @@ public class ReservationService {
         entity.setTuteurApportant(tuteurRepository.findById(reservationForm.getTuteurApportant()).orElseThrow(() -> new ElementNotFoundException(Tuteur.class, reservationForm.getTuteurApportant())));
         entity.setTuteurRecuperant(tuteurRepository.findById(reservationForm.getTuteurRecuperant()).orElseThrow(() -> new ElementNotFoundException(Tuteur.class, reservationForm.getTuteurRecuperant())));
 
-        //TODO ameliorer verification de la disponibilité (algoritme pour les differents cas de reservations)
-
         return mapper.toDto(repository.save(entity));
     }
 
