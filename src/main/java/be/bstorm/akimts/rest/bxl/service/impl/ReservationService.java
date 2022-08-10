@@ -47,7 +47,7 @@ public class ReservationService {
     public ReservationDTO create(ReservationForm reservationForm){
         if(reservationForm == null)   throw new RuntimeException("the form can not be null");
         if (!verifIfArrivateDateAndDepartDateIsSame(reservationForm.getHeureArrive(),reservationForm.getHeureArrive())) throw new RuntimeException("the arrivate day and depart day must be same");
-        if (repository.countAllByHeureArriveAndHeureArriveAndAnnuleFalse(reservationForm.getHeureArrive(), reservationForm.getHeureDepart()) >= 10)
+        if(repository.countDisponibility(reservationForm.getHeureDepart(),reservationForm.getHeureArrive()) > 10)
             throw new NoDisponibilityException(LocalDate.from(reservationForm.getHeureDepart()));
         Reservation entity = mapper.toEntity(reservationForm);
 
@@ -90,7 +90,29 @@ public class ReservationService {
         LocalDate depart = LocalDate.of(departDate.getYear(),departDate.getMonth(),departDate.getDayOfMonth());
 
         return arrivate.isEqual(depart);
-
     }
 
+//region test check dispo
+//    public boolean isAvailable(LocalDateTime arrive, LocalDateTime depart) {
+//        if ( depart.isBefore(arrive) || depart.isEqual(arrive) ){
+//            throw new IllegalArgumentException("The check-out date cannot be earlier than or equals to the check-in date.");
+//        }
+//
+//        if (arrive.isBefore(LocalDateTime.now())) {
+//            throw new IllegalArgumentException("The check-in date cannot be set in the past.");
+//        }
+//
+//        for (Reservation reservation : repository.findByHeureArriveAfterAndHeureArriveBeforeAndAnnuleFalse(arrive,depart)) {
+//            if (reservation.getHeureDepart().compareTo(LocalDateTime.now()) < 0){
+//                continue;
+//            }
+//
+//            if( arrive.isBefore(reservation.getHeureDepart()) && reservation.getHeureArrive().isBefore(depart) ) {
+//                return false;
+//            }
+//        }
+//
+//        return true;
+//    }
+//endregion
 }

@@ -87,6 +87,19 @@ public class ControllerAdvisor {
                                 .build()
                 );
     }
+    @ExceptionHandler(RuntimeException.class)
+    public ResponseEntity<ErrorDTO> handleException(RuntimeException ex, HttpServletRequest req){
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                .body(
+                        ErrorDTO.builder()
+                                .message(ex.getMessage())
+                                .receivedAt( LocalDateTime.now() )
+                                .status( 400 )
+                                .method( HttpMethod.resolve(req.getMethod()) )
+                                .path( req.getRequestURL().toString() )
+                                .build()
+                );
+    }
 
 
 
