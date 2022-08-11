@@ -48,7 +48,7 @@ public class SecurityConfig {
         http.httpBasic();
 
         http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
-
+        http.csrf().disable();
         http.authorizeRequests()
                 .antMatchers("/security/test/????").authenticated()
                 .antMatchers("/security/test/nobody").denyAll()
@@ -65,10 +65,15 @@ public class SecurityConfig {
                 // - * : joker pour un segment de 0 à N caractères
                 // - **: joker pour de 0 à N segments
                 // - {pathVar:regex}: pattern regex pour un segment
-                .anyRequest().permitAll();
+
+                .antMatchers(HttpMethod.DELETE).hasRole("ADMIN")
+                .antMatchers("/reserv/check").permitAll()
+                .anyRequest().authenticated();
+
 
         return http.build();
 
     }
 
 }
+//.antMatchers(HttpMethod.POST, "/tuteur").hasRole("USER")
