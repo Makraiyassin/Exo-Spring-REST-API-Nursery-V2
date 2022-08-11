@@ -10,8 +10,8 @@ public class AdresseForm {
 
     @Positive
     private int numero;
-    @Min(97) @Max(122)
-    private int boite;
+//    @Min(97) @Max(122)
+    private char boite;
     @NotBlank
     private String rue;
     @NotBlank

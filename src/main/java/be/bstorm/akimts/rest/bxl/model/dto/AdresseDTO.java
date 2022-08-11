@@ -14,7 +14,7 @@ import javax.validation.constraints.Positive;
 public class AdresseDTO {
 
     private Long numero;
-    private int boite;
+    private char boite;
     private String rue;
     private String ville;
     private int codePostal;

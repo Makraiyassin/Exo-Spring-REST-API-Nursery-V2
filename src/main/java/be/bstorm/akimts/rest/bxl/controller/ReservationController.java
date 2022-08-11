@@ -1,51 +1,46 @@
 package be.bstorm.akimts.rest.bxl.controller;
 
-import be.bstorm.akimts.rest.bxl.model.dto.EnfantDTO;
 import be.bstorm.akimts.rest.bxl.model.dto.ReservationDTO;
-import be.bstorm.akimts.rest.bxl.model.entities.Reservation;
-import be.bstorm.akimts.rest.bxl.model.forms.ReservationForm;
-import be.bstorm.akimts.rest.bxl.service.impl.ReservationService;
+import be.bstorm.akimts.rest.bxl.model.forms.ReservationCancellationForm;
+import be.bstorm.akimts.rest.bxl.model.forms.ReservationRequestForm;
+import be.bstorm.akimts.rest.bxl.service.ReservationService;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 @RestController
-@RequestMapping("/reservation")
+@RequestMapping("/reserv")
 public class ReservationController {
+
     private final ReservationService service;
 
     public ReservationController(ReservationService service) {
         this.service = service;
     }
 
-    @PostMapping
-    public ReservationDTO insert(@Valid @RequestBody ReservationForm form){
-        return service.create(form);
+    @PostMapping("/request")
+    public ReservationDTO requestReserv(@Valid @RequestBody ReservationRequestForm form){
+        return service.requestReservation(form);
     }
 
-    @GetMapping(params = "date")
-    public List<EnfantDTO> getChildrenPresentAt(@RequestParam  @DateTimeFormat(iso = DateTimeFormat.ISO.DATE ) LocalDate date){
-        return service.getChildrenPresentAt(date);
+    @GetMapping(value = "/check", params = {"arrival", "departure"})
+    public boolean checkAvailable( // 2020-10-10T00:00:00
+            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime arrival,
+            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime departure
+    ){
+        return service.dateAvailable(arrival, departure);
     }
 
-    @PatchMapping("/cancel/{id}")
-    public ReservationDTO cancel(@PathVariable Long id, @RequestBody String motif){
-        return service.cancel(id, motif);
+    @PatchMapping("/cancel")
+    public void cancelReservation(@Valid @RequestBody ReservationCancellationForm form){
+        service.cancelReservation(form);
     }
 
-    @GetMapping(params = "enfantId")
-    public List<ReservationDTO> getFuturReservationFor(@RequestParam Long enfantId){
-        return service.getFuturReservationFor(enfantId);
-    }
-
-
-    @GetMapping()
-    public List<ReservationDTO> getFuturReservationForThisMonth(){
-        return service.getFuturReservationForThisMonth();
+    @GetMapping("/future/month")
+    public List<ReservationDTO> getFutureReservOfCurrentMonth(){
+        return service.futureOfCurrentMonth();
     }
 }
