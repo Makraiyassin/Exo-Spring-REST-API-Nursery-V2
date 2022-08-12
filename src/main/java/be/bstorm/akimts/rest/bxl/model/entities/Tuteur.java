@@ -19,8 +19,7 @@ public class Tuteur extends Personne {
     @JoinColumn(name = "adresse_id")
     private Adresse adresse;
 
-
-    @ManyToMany(mappedBy = "tuteurs",fetch = FetchType.EAGER)
+    @ManyToMany(mappedBy = "tuteurs")
     private Set<Enfant> enfants;
 
 }
