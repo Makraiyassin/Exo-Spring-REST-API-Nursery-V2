@@ -1,5 +1,6 @@
 package be.bstorm.akimts.rest.bxl.model.forms;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
 
 import javax.validation.constraints.*;
@@ -18,4 +19,9 @@ public class EnfantInsertForm {
     private LocalDate dateNaiss;
     private boolean propre = true;
 
+    public EnfantInsertForm(String nom, String prenom, LocalDate dateNaiss) {
+        this.nom = nom;
+        this.prenom = prenom;
+        this.dateNaiss = dateNaiss;
+    }
 }

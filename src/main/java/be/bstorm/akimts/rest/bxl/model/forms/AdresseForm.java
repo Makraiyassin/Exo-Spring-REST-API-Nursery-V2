@@ -1,11 +1,13 @@
 package be.bstorm.akimts.rest.bxl.model.forms;
 
 import be.bstorm.akimts.rest.bxl.model.entities.Adresse;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 
 import javax.validation.constraints.*;
 
 @Data
+@AllArgsConstructor
 public class AdresseForm {
 
     @Positive

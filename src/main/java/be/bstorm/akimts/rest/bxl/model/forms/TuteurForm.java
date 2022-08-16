@@ -1,5 +1,6 @@
 package be.bstorm.akimts.rest.bxl.model.forms;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
 
 import javax.validation.Valid;
@@ -9,6 +10,7 @@ import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
 @Data
+@AllArgsConstructor
 public class TuteurForm {
 
     @NotBlank
