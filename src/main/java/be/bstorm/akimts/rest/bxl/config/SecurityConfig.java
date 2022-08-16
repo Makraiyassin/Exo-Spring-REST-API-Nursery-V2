@@ -64,6 +64,7 @@ public class SecurityConfig/* extends WebSecurityConfigurerAdapter  (deprecié d
         http.authorizeRequests()
                 // region demo security
                 .antMatchers("/swagger-ui/**").permitAll()
+                .antMatchers("/v3/**").permitAll()
                 .antMatchers("/security/test/all").permitAll()
                 .antMatchers("/security/test/nobody").denyAll()
                 .antMatchers("/security/test/connected").authenticated()
