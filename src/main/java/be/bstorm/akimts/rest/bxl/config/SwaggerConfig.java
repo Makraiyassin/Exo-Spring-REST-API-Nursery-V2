@@ -18,24 +18,7 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 
 @Configuration
-@OpenAPIDefinition(
-        info =@Info(
-                title = "User API",
-                version = "${api.version}",
-                contact = @Contact(
-                        name = "Baeldung", email = "user-apis@baeldung.com", url = "https://www.baeldung.com"
-                ),
-                license = @License(
-                        name = "Apache 2.0", url = "https://www.apache.org/licenses/LICENSE-2.0"
-                ),
-                termsOfService = "${tos.uri}",
-                description = "${api.description}"
-        ),
-        servers = @Server(
-                url = "${api.server.url}",
-                description = "Production"
-        )
-)public class SwaggerConfig {
+public class SwaggerConfig {
 
     @Bean
     public OpenAPI customizeOpenAPI() {
@@ -50,19 +33,4 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
                                 .scheme("bearer")
                                 .bearerFormat("JWT")));
     }
-
-    @Bean
-    public OperationCustomizer customize() {
-        return (operation, handlerMethod) -> operation.addParametersItem(
-                new Parameter()
-                        .in("header")
-                        .name("Authorization")
-        );
     }
-
-    @Bean
-    public WebSecurityCustomizer webSecurityCustomizer() {
-        return (web) -> web.ignoring().antMatchers("/swagger-ui/**", "/bus/v3/api-docs/**","/swagger-ui.html","/swagger-ui.html/**");
-    }
-
-}
