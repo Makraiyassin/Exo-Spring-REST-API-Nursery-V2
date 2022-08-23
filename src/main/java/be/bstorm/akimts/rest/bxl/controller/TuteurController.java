@@ -18,7 +18,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @RestController
-@CrossOrigin(origins = "http://localhost:4200/**")
+@CrossOrigin(origins = "http://localhost:4200/")
 @RequestMapping("/tuteur")
 public class TuteurController {
 
