@@ -17,6 +17,7 @@ import java.util.Collection;
 import java.util.List;
 
 @RestController
+@CrossOrigin(origins = "http://localhost:4200//")
 @RequestMapping("/enfant")
 public class EnfantController {
 
