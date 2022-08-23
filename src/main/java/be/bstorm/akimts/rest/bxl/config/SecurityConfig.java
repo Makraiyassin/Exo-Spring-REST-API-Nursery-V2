@@ -56,13 +56,11 @@ public class SecurityConfig/* extends WebSecurityConfigurerAdapter  (deprecié d
     public SecurityFilterChain securityFilterChain(HttpSecurity http, JwtAuthFilter authFilter) throws Exception {
 
         http.csrf().disable();
-
         http.addFilterBefore(authFilter, UsernamePasswordAuthenticationFilter.class);
         http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 
         // A ecrire du plus spécifique au plus général
         http.authorizeRequests()
-                // region demo security
                 .antMatchers("/swagger-ui/**").permitAll()
                 .antMatchers("/v3/**").permitAll()
                 .antMatchers("/security/test/all").permitAll()
@@ -75,12 +73,11 @@ public class SecurityConfig/* extends WebSecurityConfigurerAdapter  (deprecié d
                 .antMatchers("/security/test/authority/READ").hasAuthority("ROLE_USER")
                 .antMatchers("/security/test/authority/any").not().hasAnyAuthority("ROLE_USER", "WRITE")
                 .antMatchers("/fake/request/{id::[0-9]+}/**").denyAll()
-                // je peux utiliser:
-                // - ? : joker pour de 0 à 1 caractère
-                // - * : joker pour un segment de 0 à N caractères
-                // - **: joker pour de 0 à N segments
-                // - {pathVar:regex}: pattern regex pour un segment
-                // endregion
+//                 je peux utiliser:
+//                 - ? : joker pour de 0 à 1 caractère
+//                 - * : joker pour un segment de 0 à N caractères
+//                 - **: joker pour de 0 à N segments
+//                 - {pathVar:regex}: pattern regex pour un segment
                 .antMatchers("/reserv/check").permitAll()
                 .antMatchers(HttpMethod.DELETE).hasRole("ADMIN")
                 .antMatchers("/user/**").permitAll()

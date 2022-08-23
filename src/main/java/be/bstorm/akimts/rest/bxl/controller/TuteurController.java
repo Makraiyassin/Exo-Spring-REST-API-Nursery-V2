@@ -1,24 +1,17 @@
 package be.bstorm.akimts.rest.bxl.controller;
 
-import be.bstorm.akimts.rest.bxl.exceptions.ElementNotFoundException;
 import be.bstorm.akimts.rest.bxl.mapper.TuteurMapper;
-import be.bstorm.akimts.rest.bxl.model.dto.ErrorDTO;
 import be.bstorm.akimts.rest.bxl.model.dto.TuteurDTO;
-import be.bstorm.akimts.rest.bxl.model.entities.Tuteur;
 import be.bstorm.akimts.rest.bxl.model.forms.TuteurForm;
 import be.bstorm.akimts.rest.bxl.service.TuteurService;
-import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
-import java.time.LocalDateTime;
 import java.util.List;
 
 @RestController
-@CrossOrigin(origins = "http://localhost:4200/")
+@CrossOrigin(origins = {"http://localhost:4200/"})
 @RequestMapping("/tuteur")
 public class TuteurController {
 
