@@ -1,10 +1,10 @@
 package be.bstorm.akimts.rest.bxl.utils;
 
-import be.bstorm.akimts.rest.bxl.model.entities.Enfant;
-import be.bstorm.akimts.rest.bxl.model.entities.Tuteur;
 import be.bstorm.akimts.rest.bxl.model.forms.AdresseForm;
 import be.bstorm.akimts.rest.bxl.model.forms.EnfantInsertForm;
 import be.bstorm.akimts.rest.bxl.model.forms.TuteurForm;
+import be.bstorm.akimts.rest.bxl.model.forms.UtilisateurCreateForm;
+import be.bstorm.akimts.rest.bxl.service.impl.CustomUserDetailsServiceImpl;
 import be.bstorm.akimts.rest.bxl.service.impl.EnfantServiceImpl;
 import be.bstorm.akimts.rest.bxl.service.impl.TuteurServiceImpl;
 import org.springframework.beans.factory.InitializingBean;
@@ -13,15 +13,16 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Set;
 
 @Service
 public class DataInit implements InitializingBean {
     private final EnfantServiceImpl enfantService;
     private final TuteurServiceImpl tuteurService;
-    public DataInit(EnfantServiceImpl enfantService, TuteurServiceImpl tuteurService) {
+    private final CustomUserDetailsServiceImpl userDetailsService;
+    public DataInit(EnfantServiceImpl enfantService, TuteurServiceImpl tuteurService, CustomUserDetailsServiceImpl userDetailsService) {
         this.enfantService = enfantService;
         this.tuteurService = tuteurService;
+        this.userDetailsService = userDetailsService;
     }
 
     @Override
@@ -54,6 +55,7 @@ public class DataInit implements InitializingBean {
         );
         tutorList.forEach(tuteurService::create);
         childList.forEach(enfantService::create);
+        userDetailsService.create(new UtilisateurCreateForm("a","a"));
     }
 
 }

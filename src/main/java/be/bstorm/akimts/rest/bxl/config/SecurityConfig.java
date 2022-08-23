@@ -61,27 +61,28 @@ public class SecurityConfig/* extends WebSecurityConfigurerAdapter  (deprecié d
 
         // A ecrire du plus spécifique au plus général
         http.authorizeRequests()
-                .antMatchers("/swagger-ui/**").permitAll()
-                .antMatchers("/v3/**").permitAll()
-                .antMatchers("/security/test/all").permitAll()
-                .antMatchers("/security/test/nobody").denyAll()
-                .antMatchers("/security/test/connected").authenticated()
-                .antMatchers("/security/test/not-connected").anonymous()
-                .antMatchers("/security/test/role/user").hasRole("PERSONNEL")
-                .antMatchers("/security/test/role/admin").hasRole("ADMIN")
-                .antMatchers("/security/test/role/any").hasAnyRole("USER", "ADMIN")
-                .antMatchers("/security/test/authority/READ").hasAuthority("ROLE_USER")
-                .antMatchers("/security/test/authority/any").not().hasAnyAuthority("ROLE_USER", "WRITE")
-                .antMatchers("/fake/request/{id::[0-9]+}/**").denyAll()
-//                 je peux utiliser:
-//                 - ? : joker pour de 0 à 1 caractère
-//                 - * : joker pour un segment de 0 à N caractères
-//                 - **: joker pour de 0 à N segments
-//                 - {pathVar:regex}: pattern regex pour un segment
-                .antMatchers("/reserv/check").permitAll()
-                .antMatchers(HttpMethod.DELETE).hasRole("ADMIN")
-                .antMatchers("/user/**").permitAll()
-                .anyRequest().authenticated();
+//                .antMatchers("/swagger-ui/**").permitAll()
+//                .antMatchers("/v3/**").permitAll()
+//                .antMatchers("/security/test/all").permitAll()
+//                .antMatchers("/security/test/nobody").denyAll()
+//                .antMatchers("/security/test/connected").authenticated()
+//                .antMatchers("/security/test/not-connected").anonymous()
+//                .antMatchers("/security/test/role/user").hasRole("PERSONNEL")
+//                .antMatchers("/security/test/role/admin").hasRole("ADMIN")
+//                .antMatchers("/security/test/role/any").hasAnyRole("USER", "ADMIN")
+//                .antMatchers("/security/test/authority/READ").hasAuthority("ROLE_USER")
+//                .antMatchers("/security/test/authority/any").not().hasAnyAuthority("ROLE_USER", "WRITE")
+//                .antMatchers("/fake/request/{id::[0-9]+}/**").denyAll()
+////                 je peux utiliser:
+////                 - ? : joker pour de 0 à 1 caractère
+////                 - * : joker pour un segment de 0 à N caractères
+////                 - **: joker pour de 0 à N segments
+////                 - {pathVar:regex}: pattern regex pour un segment
+//                .antMatchers("/reserv/check").permitAll()
+//                .antMatchers(HttpMethod.DELETE).hasRole("ADMIN")
+//                .antMatchers("/user/**").permitAll()
+//                .anyRequest().authenticated();
+                .anyRequest().permitAll();
 
         return http.build();
 
