@@ -1,5 +1,6 @@
 package be.bstorm.akimts.rest.bxl.utils;
 
+import be.bstorm.akimts.rest.bxl.model.dto.TokenDTO;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTVerificationException;
@@ -32,8 +33,8 @@ public class JwtProvider {
         this.service = service;
     }
 
-    public String createToken(Authentication auth){
-        return JWT.create()
+    public TokenDTO createToken(Authentication auth){
+        return new TokenDTO(JWT.create()
                 // Declarer les claims du payload
                 .withExpiresAt( Instant.now().plusSeconds(properties.getExpiresAt()) )
                 .withSubject(auth.getName())
@@ -44,7 +45,8 @@ public class JwtProvider {
                                 .toList()
                 )
                 // Declarer la signature
-                .sign( Algorithm.HMAC512(properties.getSecret()) );
+                .sign( Algorithm.HMAC512(properties.getSecret()) )
+        );
     }
 
     public String extractToken(HttpServletRequest request){

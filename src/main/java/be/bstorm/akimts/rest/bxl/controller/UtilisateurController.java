@@ -1,5 +1,6 @@
 package be.bstorm.akimts.rest.bxl.controller;
 
+import be.bstorm.akimts.rest.bxl.model.dto.TokenDTO;
 import be.bstorm.akimts.rest.bxl.model.forms.LoginForm;
 import be.bstorm.akimts.rest.bxl.model.forms.UtilisateurCreateForm;
 import be.bstorm.akimts.rest.bxl.service.impl.CustomUserDetailsServiceImpl;
@@ -32,7 +33,7 @@ public class UtilisateurController {
     }
 
     @PostMapping("/login")
-    public String login(@Valid @RequestBody LoginForm form){
+    public TokenDTO login(@Valid @RequestBody LoginForm form){
         Authentication auth = authManager.authenticate(new UsernamePasswordAuthenticationToken(form.getUsername(), form.getPassword()));
         return jwtProvider.createToken(auth);
     }
