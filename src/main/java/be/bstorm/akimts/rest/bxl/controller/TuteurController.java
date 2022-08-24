@@ -5,12 +5,14 @@ import be.bstorm.akimts.rest.bxl.model.dto.TuteurDTO;
 import be.bstorm.akimts.rest.bxl.model.forms.TuteurForm;
 import be.bstorm.akimts.rest.bxl.service.TuteurService;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.List;
 
 @RestController
+@Secured("ROLE_PERSONNEL")
 @CrossOrigin(origins = {"http://localhost:4200/"})
 @RequestMapping("/tuteur")
 public class TuteurController {
