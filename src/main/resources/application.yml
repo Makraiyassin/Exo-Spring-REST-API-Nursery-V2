@@ -3,6 +3,7 @@ server:
 
 spring:
   datasource:
+#    url: jdbc:postgresql://172.17.0.2:5432/nursery_db
     url: jdbc:postgresql://localhost:5432/nursery_db
     username: postgres
     password: 1234
@@ -12,6 +13,8 @@ spring:
     show-sql: true
     hibernate:
       ddl-auto: create-drop
+#      ddl-auto: update
+#    database-platform: org.hibernate.dialect.PostgreSQLDialect
 
 
 application:
