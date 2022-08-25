@@ -19,7 +19,7 @@ import java.util.List;
 
 @RestController
 @Secured("ROLE_PERSONNEL")
-@CrossOrigin(origins = "http://localhost:4200/")
+@CrossOrigin(origins = {"http://localhost:4200/","https://makraiyassin.github.io/"})
 @RequestMapping("/enfant")
 public class EnfantController {
 
