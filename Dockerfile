@@ -12,4 +12,5 @@ FROM  openjdk:18-jdk-alpine3.14
 ARG JAVA_JAR=target/*.jar
 ADD ${JAVA_JAR} app.jar
 EXPOSE 8080
-ENTRYPOINT ["java", "-Djava.security.egd=file:/dev/./urandom", "-jar", "/app.jar"]
+#ENTRYPOINT ["java", "-Djava.security.egd=file:/dev/./urandom", "-jar", "/app.jar"]
+ENTRYPOINT ["java", "-jar", "/app.jar"]
