@@ -4,6 +4,7 @@ import be.bstorm.akimts.rest.bxl.exceptions.ElementNotFoundException;
 import be.bstorm.akimts.rest.bxl.exceptions.FormValidationException;
 import be.bstorm.akimts.rest.bxl.exceptions.InvalidReferenceException;
 import be.bstorm.akimts.rest.bxl.mapper.EnfantMapper;
+import be.bstorm.akimts.rest.bxl.mapper.MapstructMapper;
 import be.bstorm.akimts.rest.bxl.model.dto.EnfantDTO;
 import be.bstorm.akimts.rest.bxl.model.entities.Enfant;
 import be.bstorm.akimts.rest.bxl.model.entities.Reservation;
@@ -33,12 +34,14 @@ public class EnfantServiceImpl implements EnfantService {
     private final TuteurRepository tuteurRepository;
     private final ReservationRepository reservRepository;
     private final EnfantMapper mapper;
+    private final MapstructMapper mapstructMapper; //test
 
-    public EnfantServiceImpl(EnfantRepository repository, TuteurRepository tuteurRepository, ReservationRepository reservRepository, EnfantMapper mapper) {
+    public EnfantServiceImpl(EnfantRepository repository, TuteurRepository tuteurRepository, ReservationRepository reservRepository, EnfantMapper mapper, MapstructMapper mapstructMapper) {
         this.repository = repository;
         this.tuteurRepository = tuteurRepository;
         this.reservRepository = reservRepository;
         this.mapper = mapper;
+        this.mapstructMapper = mapstructMapper; //test
     }
 
     @Override
@@ -46,7 +49,8 @@ public class EnfantServiceImpl implements EnfantService {
         if( toInsert == null)
             throw new IllegalArgumentException("inserted child cannot be null");
 
-        return mapper.toDto( repository.save( mapper.toEntity( toInsert ) ) );
+//        return mapper.toDto( repository.save( mapper.toEntity( toInsert ) ) );
+        return mapstructMapper.enfantToDto( repository.save( mapstructMapper.enfantFormToEntity(toInsert))); //test
     }
 
     @Override
